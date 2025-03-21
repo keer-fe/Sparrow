@@ -3,20 +3,31 @@ import pluginJs from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import babelParser from '@babel/eslint-parser';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// 获取当前文件的绝对路径
+const currentFilePath = fileURLToPath(import.meta.url);
+// 获取当前文件所在的目录路径
+const currentDirectory = path.dirname(currentFilePath);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
+// 创建一个 ESLint 配置兼容实例，指定基础目录
+const eslintConfigCompat = new FlatCompat({
+  baseDirectory: currentDirectory,
 });
 
-/** @type {import('eslint').Linter.Config[]} */
+/**
+ * 导出 ESLint 的配置数组
+ * @type {import('eslint').Linter.Config[]}
+ */
 export default [
+  // 使用 ESLint 推荐的配置
   pluginJs.configs.recommended,
-  ...compat.extends('eslint-config-airbnb-base'),
+  // 扩展 Airbnb 的基础 ESLint 配置
+  ...eslintConfigCompat.extends('eslint-config-airbnb-base'),
   {
     languageOptions: {
+      parser: babelParser,
+      // 定义全局变量，包含浏览器、ES2021、Node.js 和 Jest 的全局变量
       globals: {
         ...globals.browser,
         ...globals.es2021,
@@ -25,7 +36,9 @@ export default [
       },
     },
     rules: {
+      // 禁用 import/prefer-default-export 规则
       'import/prefer-default-export': 0,
+      'import/no-extraneous-dependencies': 0,
     },
   },
 ];
