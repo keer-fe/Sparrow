@@ -1,6 +1,6 @@
 name: ci
 
-on: [push, pull_request] // 在 push 和 pull_request 时候触发当前工作流
+on: [push, pull_request] # 在 push 和 pull_request 时候触发当前工作流
 
 jobs:
   build:
