@@ -68,3 +68,7 @@ export function ceil(n, base) {
 export function floor(n, base) {
   return base * Math.floor(n / base);
 }
+
+export function equal(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
