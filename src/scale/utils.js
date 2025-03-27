@@ -19,7 +19,7 @@ export function tickStep(min, max, count) {
   let step1 = 10 ** Math.floor(Math.log(step0) / Math.LN10);
 
   // 计算 step1 和 step0 的误差，error = 10 ^ m - 10 ^ n = 10 ^ (m - n)
-  const error = step0 - step1;
+  const error = step0 / step1;
 
   // 1. 当 m - n >= 0.85 = log(e10) 的时候，step1 * 10
   // 可以减少log(10) = 1 的误差
@@ -85,4 +85,32 @@ export function band({ domain, range, padding }) {
     bandWidth,
     bandRange: new Array(n).fill(0).map(x),
   };
+}
+
+export function log(n, base) {
+  return Math.log(n) / Math.log(base);
+}
+
+export function identity(x) {
+  return x;
+}
+
+export function bisect(
+  array,
+  x,
+  lo = 0,
+  hi = array.length,
+  accessor = identity,
+) {
+  let i = lo;
+  let j = hi;
+  while (i < j) {
+    const mid = (i + j) >>> 1;
+    if (accessor(array[mid]) < x) {
+      i = mid + 1;
+    } else {
+      j = mid;
+    }
+  }
+  return i;
 }

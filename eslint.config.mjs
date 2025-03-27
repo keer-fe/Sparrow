@@ -48,6 +48,7 @@ export default [
       'no-loop-func': 0,
       'no-nested-ternary': 0,
       'object-curly-newline': 0,
+      'no-bitwise': 0,
     },
   },
 ];

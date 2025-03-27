@@ -10,9 +10,7 @@ export function createQuantile({ domain, range, ...rest }) {
     const i1 = i0 + 1;
     const v0 = sortedDomain[i0];
     const v1 = sortedDomain[i1];
-
-    return v0 * (i - i0) + v1 * (i1 - i);
+    return v0 * (i1 - i) + v1 * (i - i0);
   });
-
   return createThreshold({ domain: quantileDomain, range, ...rest });
 }

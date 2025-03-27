@@ -1,8 +1,9 @@
-import { normalize, ticks, nice, tickStep, floor, ceil } from './utils';
+import { tickStep, ticks, floor, ceil, normalize, nice } from './utils';
+import { interpolateNumber } from './interpolate';
 
 export function createLinear({
-  domain: [d0, d1], // 输入范围
-  range: [r0, r1], // 输出范围
+  domain: [d0, d1],
+  range: [r0, r1],
   interpolate = interpolateNumber,
 }) {
   const scale = (x) => {
@@ -10,10 +11,11 @@ export function createLinear({
     return interpolate(t, r0, r1);
   };
 
-  scale.ticks = (tickCount) => ticks(d0, d1, tickCount);
-  scale.nice = (tickCount) => {
+  scale.ticks = (tickCount = 10) => ticks(d0, d1, tickCount);
+  scale.nice = (tickCount = 10) => {
+    if (d0 === d1) return;
+    // the first time
     const step = tickStep(d0, d1, tickCount);
-
     [d0, d1] = nice([d0, d1], {
       floor: (x) => floor(x, step),
       ceil: (x) => ceil(x, step),
@@ -21,15 +23,4 @@ export function createLinear({
   };
 
   return scale;
-}
-
-export function interpolateNumber(t, start, end) {
-  return t * end - start * (t - 1);
-}
-
-export function interpolateColor(t, start, end) {
-  const r = interpolateColor(t, start[0], end[0]);
-  const g = interpolateColor(t, start[1], end[1]);
-  const b = interpolateColor(t, start[2], end[2]);
-  return `rgb(${r}, ${g}, ${b})`;
 }
